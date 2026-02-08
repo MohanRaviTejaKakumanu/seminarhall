@@ -1,0 +1,130 @@
+.notifications-container {
+  max-width: 600px;
+  margin: 30px auto;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+
+.notifications-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+  border-bottom: 1px solid #e5e7eb;
+  background: #f9fafb;
+}
+
+.notifications-header h2 {
+  margin: 0;
+  font-size: 20px;
+  color: #1f2937;
+}
+
+.unread-badge {
+  display: inline-block;
+  background: #ef4444;
+  color: white;
+  border-radius: 50%;
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 12px;
+}
+
+.notifications-spinner {
+  padding: 40px 20px;
+  text-align: center;
+  color: #6b7280;
+}
+
+.notifications-empty {
+  padding: 60px 20px;
+  text-align: center;
+  color: #9ca3af;
+}
+
+.notifications-list {
+  display: flex;
+  flex-direction: column;
+  max-height: 500px;
+  overflow-y: auto;
+}
+
+.notification-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 20px;
+  border-bottom: 1px solid #f3f4f6;
+  transition: all 0.2s;
+}
+
+.notification-item.unread {
+  background: #f3f4f6;
+  border-left: 4px solid #3b82f6;
+}
+
+.notification-item:hover {
+  background: #f9fafb;
+}
+
+.notification-content h3 {
+  margin: 0 0 5px;
+  font-size: 16px;
+  font-weight: 600;
+  color: #1f2937;
+}
+
+.notification-content p {
+  margin: 0 0 8px;
+  color: #4b5563;
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+.notification-content small {
+  color: #9ca3af;
+  font-size: 12px;
+  background: white;
+  padding: 2px 8px;
+  border-radius: 4px;
+  display: inline-block;
+}
+
+.notification-actions {
+  display: flex;
+  gap: 8px;
+  margin-left: 15px;
+}
+
+.btn-mark-read,
+.btn-action,
+.btn-delete {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 18px;
+  padding: 5px 8px;
+  border-radius: 4px;
+  transition: all 0.2s;
+  color: #6b7280;
+}
+
+.btn-mark-read:hover {
+  background: #d1d5db;
+  color: #10b981;
+}
+
+.btn-action:hover {
+  color: #3b82f6;
+}
+
+.btn-delete:hover {
+  background: #fecaca;
+  color: #ef4444;
+}

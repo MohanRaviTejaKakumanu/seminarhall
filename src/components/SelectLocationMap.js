@@ -41,19 +41,25 @@ export default function SelectLocationMap({
 
     const searchBox = new window.google.maps.places.SearchBox(inputRef.current);
 
-    map.addListener("click", (e) => {
-      setMarker(e.latLng, "Selected location");
-    });
+    const listeners = [];
 
-    searchBox.addListener("places_changed", () => {
-      const places = searchBox.getPlaces();
-      if (!places.length) return;
-      const place = places[0];
-      const loc = place.geometry.location;
-      map.panTo(loc);
-      map.setZoom(15);
-      setMarker(loc, place.formatted_address || place.name);
-    });
+    listeners.push(
+      map.addListener("click", (e) => {
+        setMarker(e.latLng, "Selected location");
+      }),
+    );
+
+    listeners.push(
+      searchBox.addListener("places_changed", () => {
+        const places = searchBox.getPlaces();
+        if (!places.length) return;
+        const place = places[0];
+        const loc = place.geometry.location;
+        map.panTo(loc);
+        map.setZoom(15);
+        setMarker(loc, place.formatted_address || place.name);
+      }),
+    );
 
     function setMarker(location, name) {
       if (markerRef.current) markerRef.current.setMap(null);
@@ -63,12 +69,28 @@ export default function SelectLocationMap({
       });
 
       onChange?.({
-        lat: location.lat(),
-        lng: location.lng(),
+        lat: typeof location.lat === "function" ? location.lat() : location.lat,
+        lng: typeof location.lng === "function" ? location.lng() : location.lng,
         name,
       });
     }
-  }, [loaded, error]);
+
+    return () => {
+      // remove listeners
+      listeners.forEach((l) => {
+        try {
+          window.google.maps.event.removeListener(l);
+        } catch (e) {
+          // ignore
+        }
+      });
+      // remove marker
+      if (markerRef.current) {
+        markerRef.current.setMap(null);
+        markerRef.current = null;
+      }
+    };
+  }, [loaded, error, center, zoom, onChange]);
 
   if (error) {
     return <div style={{ color: "red" }}>{error}</div>;

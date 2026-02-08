@@ -1,6 +1,12 @@
 // src/App.js
 import React, { useContext } from "react";
-import { BrowserRouter, Routes, Route, Navigate, useLocation } from "react-router-dom";
+import {
+  BrowserRouter,
+  Routes,
+  Route,
+  Navigate,
+  useLocation,
+} from "react-router-dom";
 
 import { AuthContext } from "./context/AuthContext";
 
@@ -14,6 +20,7 @@ import MyEvents from "./components/MyEvents";
 import EventCalendarView from "./components/EventCalendarView";
 import MapView from "./components/MapView";
 import HallEventsOnMap from "./components/HallEventsOnMap";
+import Notifications from "./components/Notifications";
 
 function Layout() {
   const { user } = useContext(AuthContext);
@@ -35,15 +42,40 @@ function Layout() {
         <Route path="/forgot-password" element={<ForgotPasswordPage />} />
 
         {/* Student Dashboard pages */}
-        <Route path="/events" element={user ? <EventList /> : <Navigate to="/login" />} />
-        <Route path="/events/:id" element={user ? <EventDetails /> : <Navigate to="/login" />} />
-        <Route path="/my-events" element={user ? <MyEvents /> : <Navigate to="/login" />} />
-        <Route path="/calendar" element={user ? <EventCalendarView /> : <Navigate to="/login" />} />
-        <Route path="/map" element={user ? <MapView /> : <Navigate to="/login" />} />
-        <Route path="/hall-events" element={user ? <HallEventsOnMap /> : <Navigate to="/login" />} />
+        <Route
+          path="/events"
+          element={user ? <EventList /> : <Navigate to="/login" />}
+        />
+        <Route
+          path="/events/:id"
+          element={user ? <EventDetails /> : <Navigate to="/login" />}
+        />
+        <Route
+          path="/my-events"
+          element={user ? <MyEvents /> : <Navigate to="/login" />}
+        />
+        <Route
+          path="/calendar"
+          element={user ? <EventCalendarView /> : <Navigate to="/login" />}
+        />
+        <Route
+          path="/map"
+          element={user ? <MapView /> : <Navigate to="/login" />}
+        />
+        <Route
+          path="/hall-events"
+          element={user ? <HallEventsOnMap /> : <Navigate to="/login" />}
+        />
+        <Route
+          path="/notifications"
+          element={user ? <Notifications /> : <Navigate to="/login" />}
+        />
 
         {/* Default */}
-        <Route path="*" element={<Navigate to={user ? "/events" : "/login"} />} />
+        <Route
+          path="*"
+          element={<Navigate to={user ? "/events" : "/login"} />}
+        />
       </Routes>
     </>
   );

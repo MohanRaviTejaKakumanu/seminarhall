@@ -1,184 +1,303 @@
 import React, { useEffect, useState, useContext } from "react";
-import API from "../api";
 import { AuthContext } from "../context/AuthContext";
+import API from "../api";
 import "./EventList.css";
 
-const EventList = ({ onSelect }) => {
+export default function EventList() {
   const { user } = useContext(AuthContext);
   const [events, setEvents] = useState([]);
-  const [halls, setHalls] = useState([]);
+  const [filteredEvents, setFilteredEvents] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  // Filter states
   const [filters, setFilters] = useState({
     date: "",
-    hallId: "",
-    department: "",
     category: "",
-    search: ""
+    hall: "",
+    department: "",
   });
+  const [halls, setHalls] = useState([]);
+  const [categories, setCategories] = useState([]);
 
-  const load = async () => {
-    setLoading(true);
-    try {
-      const params = {};
-      if (filters.date) params.date = filters.date;
-      if (filters.hallId) params.hallId = filters.hallId;
-      if (filters.department) params.department = filters.department;
-      if (filters.category) params.category = filters.category;
-      if (filters.search) params.search = filters.search;
-
-      const [evRes, hallRes] = await Promise.all([
-        API.get("/events", { params }),
-        API.get("/halls")
-      ]);
-      setEvents(evRes.data);
-      setHalls(hallRes.data);
-    } catch (err) {
-      console.error("Error loading events:", err);
-    } finally {
-      setLoading(false);
-    }
-  };
-
+  // Fetch events from backend
   useEffect(() => {
-    load();
-    // eslint-disable-next-line
+    const fetchData = async () => {
+      try {
+        setLoading(true);
+
+        // Fetch all events matching backend Event schema
+        const eventsRes = await API.get("/events");
+        const eventData = eventsRes.data || [];
+
+        // Only show active, approved events
+        const approvedEvents = eventData.filter(
+          (e) => e.status === "active" && e.approved !== false,
+        );
+        setEvents(approvedEvents);
+        setFilteredEvents(approvedEvents);
+
+        // Fetch halls for filter dropdown
+        const hallsRes = await API.get("/halls");
+        setHalls(hallsRes.data || []);
+
+        // Extract unique categories from events
+        const uniqueCategories = [
+          ...new Set(approvedEvents.map((e) => e.category).filter(Boolean)),
+        ];
+        setCategories(uniqueCategories);
+
+        setError(null);
+      } catch (err) {
+        console.error("Error fetching events:", err);
+        setError("Failed to load events. Please try again.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
   }, []);
 
-  const applyFilters = (e) => {
-    e.preventDefault();
-    load();
+  // Apply filters
+  const applyFilters = () => {
+    let result = [...events];
+
+    if (filters.date) {
+      result = result.filter((e) => {
+        const eventDate = new Date(e.date).toISOString().split("T")[0];
+        return eventDate === filters.date;
+      });
+    }
+
+    if (filters.category) {
+      result = result.filter((e) => e.category === filters.category);
+    }
+
+    if (filters.hall) {
+      result = result.filter(
+        (e) =>
+          e.hall === filters.hall || (e.hall && e.hall._id === filters.hall),
+      );
+    }
+
+    if (filters.department) {
+      result = result.filter((e) =>
+        e.department?.toLowerCase().includes(filters.department.toLowerCase()),
+      );
+    }
+
+    setFilteredEvents(result);
   };
 
-  const clearFilters = () => {
+  // Handle filter change
+  const handleFilterChange = (e) => {
+    const { name, value } = e.target;
+    setFilters((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
+  // Handle filter button click
+  const handleFilter = () => {
+    applyFilters();
+  };
+
+  // Reset filters
+  const resetFilters = () => {
     setFilters({
       date: "",
-      hallId: "",
-      department: "",
       category: "",
-      search: ""
+      hall: "",
+      department: "",
     });
+    setFilteredEvents(events);
   };
 
+  // Determine if event is full
+  const isEventFull = (event) => {
+    return event.currentRegistrations >= event.maxRegistrations;
+  };
+
+  // Get hall name from hall object or fallback
+  const getHallName = (hall) => {
+    if (!hall) return "TBD";
+    return typeof hall === "string" ? hall : hall.name;
+  };
+
+  // Get status badge color
+  const getStatusColor = (status) => {
+    const colors = {
+      active: "#10b981",
+      cancelled: "#ef4444",
+      completed: "#6b7280",
+    };
+    return colors[status] || "#6b7280";
+  };
+
+  if (error) {
+    return (
+      <div className="events-page">
+        <h2>🎉 Discover Events</h2>
+        <div className="error-message">{error}</div>
+      </div>
+    );
+  }
+
   return (
-    <div className="events-container">
-      <div className="events-header">
-        <h2>📅 Discover Events</h2>
-        <p>Find and register for amazing college events</p>
+    <div className="events-page">
+      <h2>🎉 Discover Events</h2>
+      <p className="subtitle">Find and register for amazing college events</p>
+
+      {/* Filters */}
+      <div className="filters">
+        <input
+          type="date"
+          name="date"
+          value={filters.date}
+          onChange={handleFilterChange}
+        />
+        <select
+          name="category"
+          value={filters.category}
+          onChange={handleFilterChange}
+        >
+          <option value="">All Categories</option>
+          {categories.map((cat) => (
+            <option key={cat} value={cat}>
+              {cat}
+            </option>
+          ))}
+        </select>
+        <select name="hall" value={filters.hall} onChange={handleFilterChange}>
+          <option value="">All Locations</option>
+          {halls.map((hall) => (
+            <option
+              key={hall._id || hall.hallId}
+              value={hall._id || hall.hallId}
+            >
+              {hall.name} ({hall.building})
+            </option>
+          ))}
+        </select>
+        <input
+          type="text"
+          name="department"
+          placeholder="Department"
+          value={filters.department}
+          onChange={handleFilterChange}
+        />
+        <button className="filter-btn" onClick={handleFilter}>
+          🔍 Filter
+        </button>
+        <button className="reset-btn" onClick={resetFilters}>
+          ↻ Reset
+        </button>
       </div>
 
-      <form className="filters" onSubmit={applyFilters}>
-        <div className="filter-group">
-          <input
-            type="text"
-            placeholder="🔍 Search events..."
-            value={filters.search}
-            onChange={(e) => setFilters({ ...filters, search: e.target.value })}
-            className="filter-input"
-          />
-        </div>
-
-        <div className="filter-row">
-          <div className="filter-group">
-            <input
-              type="date"
-              value={filters.date}
-              onChange={(e) => setFilters({ ...filters, date: e.target.value })}
-              className="filter-input"
-            />
-          </div>
-
-          <div className="filter-group">
-            <select
-              value={filters.category}
-              onChange={(e) => setFilters({ ...filters, category: e.target.value })}
-              className="filter-input"
-            >
-              <option value="">All Categories</option>
-              <option value="Academic">Academic</option>
-              <option value="Sports">Sports</option>
-              <option value="Cultural">Cultural</option>
-              <option value="Workshop">Workshop</option>
-              <option value="Seminar">Seminar</option>
-              <option value="Conference">Conference</option>
-              <option value="Social">Social</option>
-            </select>
-          </div>
-
-          <div className="filter-group">
-            <select
-              value={filters.hallId}
-              onChange={(e) => setFilters({ ...filters, hallId: e.target.value })}
-              className="filter-input"
-            >
-              <option value="">All Locations</option>
-              {halls.map((h) => (
-                <option key={h._id} value={h._id}>
-                  {h.name}
-                </option>
-              ))}
-            </select>
-          </div>
-
-          <div className="filter-group">
-            <input
-              type="text"
-              placeholder="Department"
-              value={filters.department}
-              onChange={(e) => setFilters({ ...filters, department: e.target.value })}
-              className="filter-input"
-            />
-          </div>
-        </div>
-
-        <div className="filter-actions">
-          <button type="submit" className="btn-filter">🔍 Filter</button>
-          <button type="button" onClick={clearFilters} className="btn-clear">Clear Filters</button>
-        </div>
-      </form>
-
+      {/* Events Grid */}
       {loading ? (
-        <div className="loading-state">Loading events...</div>
-      ) : events.length === 0 ? (
-        <div className="no-events">
-          <p>😢 No events found. Try adjusting your filters!</p>
+        <div className="loading-state">
+          <p>⏳ Loading events...</p>
+        </div>
+      ) : filteredEvents.length === 0 ? (
+        <div className="empty">
+          😕 <b>No events found</b>
+          <p>
+            {filters.date ||
+            filters.category ||
+            filters.hall ||
+            filters.department
+              ? "Try adjusting your filters"
+              : "No events available at the moment"}
+          </p>
         </div>
       ) : (
-        <ul className="event-list">
-          {events.map((ev) => (
-            <li key={ev._id} onClick={() => onSelect(ev._id)} className="event-list-item">
-              <div className="event-list-content">
-                <div className="event-list-left">
-                  <div className="event-date-badge">
-                    <span className="day">{new Date(ev.date).getDate()}</span>
-                    <span className="month">{new Date(ev.date).toLocaleDateString('en-US', { month: 'short' })}</span>
-                  </div>
-                </div>
-                <div className="event-list-middle">
-                  <h3>{ev.title}</h3>
-                  <p className="event-category">{ev.category}</p>
-                  {ev.department && <p className="event-dept">🏢 {ev.department}</p>}
-                  <p className="event-time">🕐 {ev.startTime} - {ev.endTime}</p>
-                  {ev.hall && <p className="event-location">📍 {ev.hall?.name}</p>}
-                </div>
-                <div className="event-list-right">
-                  <p className="event-registrations">👥 {ev.currentRegistrations || 0}/{ev.maxRegistrations}</p>
-                  <button className="btn-view" onClick={(e) => { e.stopPropagation(); onSelect(ev._id); }}>
-                    View Details →
-                  </button>
+        <div className="event-grid">
+          {filteredEvents.map((event) => (
+            <div className="event-card" key={event._id || event.eventId}>
+              {/* Status Badge */}
+              <div
+                className="event-badge"
+                style={{ backgroundColor: getStatusColor(event.status) }}
+              >
+                {event.status.toUpperCase()}
+              </div>
+
+              {/* Category Badge */}
+              {event.category && (
+                <div className="category-badge">{event.category}</div>
+              )}
+
+              {/* Card Content */}
+              <div className="card-content">
+                <h3>{event.title}</h3>
+                <p className="organizer">
+                  👤 {event.organizerName || "Event Team"}
+                </p>
+                <p className="description">
+                  {event.description?.substring(0, 80)}...
+                </p>
+
+                <div className="event-meta">
+                  <p>
+                    <strong>📅 Date:</strong>{" "}
+                    {new Date(event.date).toLocaleDateString()}
+                  </p>
+                  <p>
+                    <strong>🕐 Time:</strong> {event.startTime} -{" "}
+                    {event.endTime}
+                  </p>
+                  <p>
+                    <strong>📍 Hall:</strong> {getHallName(event.hall)}
+                  </p>
+                  <p>
+                    <strong>🏢 Dept:</strong> {event.department}
+                  </p>
+                  <p>
+                    <strong>👥 Capacity:</strong> {event.currentRegistrations}/
+                    {event.maxRegistrations}
+                    {isEventFull(event) && (
+                      <span className="full-badge">FULL</span>
+                    )}
+                  </p>
                 </div>
               </div>
-            </li>
-          ))}
-        </ul>
-      )}
 
-      {!user && (
-        <div className="login-prompt">
-          <p>✨ Want to register for events? <strong>Login or Sign Up</strong> to get started!</p>
+              {/* Actions */}
+              <div className="card-actions">
+                {isEventFull(event) ? (
+                  <button className="btn-disabled" disabled>
+                    Event Full
+                  </button>
+                ) : event.status !== "active" ? (
+                  <button className="btn-disabled" disabled>
+                    {event.status}
+                  </button>
+                ) : user?.role === "student" ? (
+                  <a
+                    href={`/event/${event._id || event.eventId}`}
+                    className="btn-register"
+                  >
+                    Register →
+                  </a>
+                ) : (
+                  <button className="btn-disabled" disabled>
+                    Login to Register
+                  </button>
+                )}
+                <a
+                  href={`/event/${event._id || event.eventId}`}
+                  className="btn-details"
+                >
+                  Details
+                </a>
+              </div>
+            </div>
+          ))}
         </div>
       )}
     </div>
   );
-};
-
-export default EventList;
+}
