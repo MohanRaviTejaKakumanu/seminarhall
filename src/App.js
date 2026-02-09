@@ -21,6 +21,7 @@ import EventCalendarView from "./components/EventCalendarView";
 import MapView from "./components/MapView";
 import HallEventsOnMap from "./components/HallEventsOnMap";
 import Notifications from "./components/Notifications";
+import AdminPanel from "./components/AdminPanel";
 
 function Layout() {
   const { user } = useContext(AuthContext);
@@ -47,7 +48,7 @@ function Layout() {
           element={user ? <EventList /> : <Navigate to="/login" />}
         />
         <Route
-          path="/events/:id"
+          path="/event/:eventId"
           element={user ? <EventDetails /> : <Navigate to="/login" />}
         />
         <Route
@@ -69,6 +70,14 @@ function Layout() {
         <Route
           path="/notifications"
           element={user ? <Notifications /> : <Navigate to="/login" />}
+        />
+
+        {/* Admin Panel */}
+        <Route
+          path="/admin"
+          element={
+            user?.role === "admin" ? <AdminPanel /> : <Navigate to="/events" />
+          }
         />
 
         {/* Default */}

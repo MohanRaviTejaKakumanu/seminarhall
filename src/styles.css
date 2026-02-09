@@ -10,7 +10,7 @@ html {
 }
 
 body {
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
   min-height: 100vh;
   color: #333;
@@ -47,7 +47,11 @@ body {
   min-height: calc(100vh - 90px);
 }
 
-.auth-container, .events-container, .admin-events, .calendar-view, .map-view {
+.auth-container,
+.events-container,
+.admin-events,
+.calendar-view,
+.map-view {
   background: white;
   padding: 30px;
   border-radius: 12px;
@@ -55,13 +59,17 @@ body {
   margin-bottom: 20px;
 }
 
-.auth-container form, .admin-form, .filters {
+.auth-container form,
+.admin-form,
+.filters {
   display: flex;
   flex-direction: column;
   gap: 15px;
 }
 
-input, select, textarea {
+input,
+select,
+textarea {
   padding: 12px 15px;
   border: 2px solid #e1e8ed;
   border-radius: 8px;
@@ -71,7 +79,9 @@ input, select, textarea {
   transition: all 0.3s ease;
 }
 
-input:focus, select:focus, textarea:focus {
+input:focus,
+select:focus,
+textarea:focus {
   outline: none;
   border-color: #667eea;
   background: white;
@@ -97,6 +107,28 @@ button {
 
 button:disabled {
   opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.btn-delete-admin {
+  background-color: #dc3545;
+  color: white;
+  padding: 10px 15px;
+  margin-bottom: 15px;
+  width: 100%;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.btn-delete-admin:hover:not(:disabled) {
+  background-color: #c82333;
+}
+
+.btn-delete-admin:disabled {
+  opacity: 0.7;
   cursor: not-allowed;
 }
 
@@ -235,11 +267,17 @@ button:disabled {
     padding: 0 10px;
   }
 
-  .auth-container, .events-container, .admin-events, .calendar-view, .map-view {
+  .auth-container,
+  .events-container,
+  .admin-events,
+  .calendar-view,
+  .map-view {
     padding: 20px;
   }
 
-  input, select, textarea {
+  input,
+  select,
+  textarea {
     font-size: 16px;
   }
 
@@ -254,12 +292,19 @@ button:disabled {
     margin: 10px auto;
   }
 
-  .auth-container, .events-container, .admin-events, .calendar-view, .map-view {
+  .auth-container,
+  .events-container,
+  .admin-events,
+  .calendar-view,
+  .map-view {
     padding: 15px;
     border-radius: 8px;
   }
 
-  input, select, textarea, button {
+  input,
+  select,
+  textarea,
+  button {
     padding: 10px 12px;
     font-size: 14px;
     border-radius: 6px;

@@ -14,6 +14,7 @@ const EventDetails = () => {
   const [loading, setLoading] = useState(true);
   const [isRegistered, setIsRegistered] = useState(false);
   const [registering, setRegistering] = useState(false);
+  const [deleting, setDeleting] = useState(false);
 
   // Fetch event details matching backend Event schema
   useEffect(() => {
@@ -100,6 +101,27 @@ const EventDetails = () => {
       setMessage("❌ " + errMsg);
     } finally {
       setRegistering(false);
+    }
+  };
+
+  // Handle delete event (admin only)
+  const handleDeleteEvent = async () => {
+    if (
+      !window.confirm(
+        "Are you sure you want to delete this event? This action cannot be undone.",
+      )
+    )
+      return;
+
+    try {
+      setDeleting(true);
+      await API.delete(`/events/${eventId}`);
+      setMessage("✓ Event deleted successfully!");
+      setTimeout(() => navigate("/events"), 1500);
+    } catch (err) {
+      const errMsg = err.response?.data?.msg || "Failed to delete event";
+      setMessage("❌ " + errMsg);
+      setDeleting(false);
     }
   };
 
@@ -230,6 +252,17 @@ const EventDetails = () => {
           <div className="details-right">
             <div className="registration-card">
               <h2>Registration</h2>
+
+              {/* Admin Delete Button */}
+              {user?.role === "admin" && (
+                <button
+                  className="btn-delete-admin"
+                  onClick={handleDeleteEvent}
+                  disabled={deleting}
+                >
+                  {deleting ? "Deleting..." : "🗑️ Delete Event"}
+                </button>
+              )}
 
               {/* Capacity Info */}
               <div className="capacity-info">

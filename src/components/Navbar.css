@@ -16,7 +16,7 @@
 
 /* ⭐ THIS pushes links to the RIGHT */
 .nav-links {
-  margin-left: auto;        /* 🔥 MAGIC LINE */
+  margin-left: auto; /* 🔥 MAGIC LINE */
   display: flex;
   align-items: center;
   gap: 22px;
@@ -32,6 +32,19 @@
 
 .nav-links a:hover {
   text-decoration: underline;
+}
+
+/* Admin Link - highlighted styling */
+.nav-links .admin-link {
+  background-color: rgba(255, 255, 255, 0.2);
+  padding: 6px 12px;
+  border-radius: 6px;
+  transition: background-color 0.3s ease;
+}
+
+.nav-links .admin-link:hover {
+  background-color: rgba(255, 255, 255, 0.3);
+  text-decoration: none;
 }
 
 /* Notifications badge */

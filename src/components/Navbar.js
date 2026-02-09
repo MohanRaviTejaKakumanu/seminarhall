@@ -44,6 +44,11 @@ export default function Navbar() {
         <Link to="/my-events">My Events</Link>
         <Link to="/calendar">Calendar</Link>
         <Link to="/map">Map</Link>
+        {user?.role === "admin" && (
+          <Link to="/admin" className="admin-link">
+            🎛️ Admin Panel
+          </Link>
+        )}
         <Link to="/notifications" className="notifications-link">
           🔔 Notifications
           {unreadCount > 0 && (

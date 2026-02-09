@@ -82,6 +82,25 @@ const MyEvents = () => {
     return hall.building || "";
   };
 
+  // Known hall coordinates (use when opening directions)
+  const HALL_COORDS = {
+    "newton hall": { lat: 16.24785544, lng: 80.43105981 },
+    "cv raman hall": { lat: 16.24782066, lng: 80.43110418 },
+    "abdul kalam hall": { lat: 16.24808629, lng: 80.43100546 },
+  };
+
+  const findHallCoords = (hallName) => {
+    if (!hallName) return null;
+    const key = hallName.toLowerCase();
+    // direct match
+    if (HALL_COORDS[key]) return HALL_COORDS[key];
+    // partial match
+    for (const k of Object.keys(HALL_COORDS)) {
+      if (key.includes(k)) return HALL_COORDS[k];
+    }
+    return null;
+  };
+
   const filtered = filterRegistrations();
   const upcomingCount = registrations.filter(
     (r) => r.event && new Date(r.event.date) >= new Date(),
@@ -219,6 +238,14 @@ const MyEvents = () => {
                           className="btn btn-primary"
                           onClick={() => {
                             const hallName = getHallName(event.hall);
+                            const coords = findHallCoords(hallName);
+                            if (coords) {
+                              const url = `https://www.google.com/maps/dir/?api=1&destination=${coords.lat},${coords.lng}`;
+                              window.open(url, "_blank");
+                              return;
+                            }
+
+                            // Fallback: search by name/building
                             const hallBuilding = getHallBuilding(event.hall);
                             const query = hallBuilding
                               ? `${hallName} ${hallBuilding}`
