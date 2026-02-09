@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useContext } from "react";
-import { AuthContext } from "../context/AuthContext";
-import API from "../api";
-import "./Notifications.css";
+import { AuthContext } from "../../../context/AuthContext";
+import API from "../../../api";
+import "../Notifications.css";
 
 const Notifications = () => {
   const { user } = useContext(AuthContext);

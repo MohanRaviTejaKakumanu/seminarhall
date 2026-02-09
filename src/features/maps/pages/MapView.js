@@ -1,8 +1,8 @@
-// frontend/src/components/MapView.js
+// frontend/src/features/maps/pages/MapView.js
 import React, { useState, useEffect } from "react";
-import API from "../api";
+import API from "../../../api";
 import PropTypes from "prop-types";
-import "./MapView.css";
+import "../MapView.css";
 
 /**
  * MapView

@@ -1,6 +1,6 @@
-// frontend/src/components/HallEventsOnMap.js
+// frontend/src/features/maps/components/HallEventsOnMap.js
 import React, { useEffect, useState } from "react";
-import API from "../api";
+import API from "../../../api";
 
 const HallEventsOnMap = ({ hall }) => {
   const [eventsByDate, setEventsByDate] = useState({});

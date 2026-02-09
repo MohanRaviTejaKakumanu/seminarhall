@@ -1,7 +1,7 @@
 import React, { useState, useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { AuthContext } from "../context/AuthContext";
-import "./Auth.css";
+import { AuthContext } from "../../../context/AuthContext";
+import "../Auth.css";
 
 const RegisterPage = () => {
   const { register } = useContext(AuthContext);
@@ -12,7 +12,7 @@ const RegisterPage = () => {
     name: "",
     email: "",
     password: "",
-    confirmPassword: ""
+    confirmPassword: "",
   });
 
   const [error, setError] = useState("");
@@ -29,12 +29,7 @@ const RegisterPage = () => {
 
     setLoading(true);
     try {
-      await register(
-        form.name,
-        form.email,
-        form.password,
-        form.role
-      );
+      await register(form.name, form.email, form.password, form.role);
       navigate("/login");
     } catch (err) {
       setError(err?.response?.data?.msg || "Registration failed");
@@ -52,18 +47,14 @@ const RegisterPage = () => {
         {/* ✅ ROLE BOXES */}
         <div className="role-container">
           <div
-            className={`role-box ${
-              form.role === "student" ? "active" : ""
-            }`}
+            className={`role-box ${form.role === "student" ? "active" : ""}`}
             onClick={() => setForm({ ...form, role: "student" })}
           >
             Student
           </div>
 
           <div
-            className={`role-box ${
-              form.role === "admin" ? "active" : ""
-            }`}
+            className={`role-box ${form.role === "admin" ? "active" : ""}`}
             onClick={() => setForm({ ...form, role: "admin" })}
           >
             Admin
@@ -77,9 +68,7 @@ const RegisterPage = () => {
               type="text"
               required
               value={form.name}
-              onChange={(e) =>
-                setForm({ ...form, name: e.target.value })
-              }
+              onChange={(e) => setForm({ ...form, name: e.target.value })}
             />
             <label>Full Name</label>
           </div>
@@ -90,9 +79,7 @@ const RegisterPage = () => {
               type="email"
               required
               value={form.email}
-              onChange={(e) =>
-                setForm({ ...form, email: e.target.value })
-              }
+              onChange={(e) => setForm({ ...form, email: e.target.value })}
             />
             <label>Email</label>
           </div>
@@ -103,9 +90,7 @@ const RegisterPage = () => {
               type="password"
               required
               value={form.password}
-              onChange={(e) =>
-                setForm({ ...form, password: e.target.value })
-              }
+              onChange={(e) => setForm({ ...form, password: e.target.value })}
             />
             <label>Password</label>
           </div>
@@ -131,8 +116,7 @@ const RegisterPage = () => {
         </form>
 
         <p className="footer-text">
-          Already have an account?{" "}
-          <Link to="/login">Sign in</Link>
+          Already have an account? <Link to="/login">Sign in</Link>
         </p>
       </div>
     </div>

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import API from "../api";
-import "./EventFeedback.css";
+import API from "../../../api";
+import "../EventFeedback.css";
 
 const EventFeedback = ({ eventId }) => {
   const [feedbacks, setFeedbacks] = useState([]);

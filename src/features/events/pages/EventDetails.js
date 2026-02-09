@@ -1,9 +1,10 @@
-// frontend/src/components/EventDetails.js
+// frontend/src/features/events/pages/EventDetails.js
 import React, { useEffect, useState, useContext } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import API from "../api";
-import { AuthContext } from "../context/AuthContext";
-import EventFeedback from "./EventFeedback";
+import API from "../../../api";
+import { AuthContext } from "../../../context/AuthContext";
+import "../components/EventFeedback.js";
+import EventFeedback from "../components/EventFeedback";
 
 const EventDetails = () => {
   const { eventId } = useParams();

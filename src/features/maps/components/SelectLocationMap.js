@@ -100,10 +100,21 @@ export default function SelectLocationMap({
     <div>
       <input
         ref={inputRef}
-        placeholder="Search college or hall"
-        style={{ width: "100%", padding: 10, marginBottom: 8 }}
+        type="text"
+        placeholder="Search location"
+        style={{
+          width: "100%",
+          padding: "10px",
+          marginBottom: "10px",
+          fontSize: "16px",
+          border: "1px solid #ccc",
+          borderRadius: "4px",
+        }}
       />
-      <div ref={mapRef} style={{ height: 400 }} />
+      <div
+        ref={mapRef}
+        style={{ width: "100%", height: "400px", borderRadius: "8px" }}
+      />
     </div>
   );
 }

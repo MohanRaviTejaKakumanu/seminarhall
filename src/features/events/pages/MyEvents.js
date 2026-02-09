@@ -1,8 +1,8 @@
 import React, { useEffect, useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
-import { AuthContext } from "../context/AuthContext";
-import API from "../api";
-import "./MyEvents.css";
+import { AuthContext } from "../../../context/AuthContext";
+import API from "../../../api";
+import "../MyEvents.css";
 
 const MyEvents = () => {
   const { user } = useContext(AuthContext);

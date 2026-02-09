@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useContext } from "react";
-import { AuthContext } from "../context/AuthContext";
-import API from "../api";
-import "./EventList.css";
+import { AuthContext } from "../../../context/AuthContext";
+import API from "../../../api";
+import "../EventList.css";
 
 export default function EventList() {
   const { user } = useContext(AuthContext);

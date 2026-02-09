@@ -1,8 +1,8 @@
 import React, { useEffect, useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
-import { AuthContext } from "../context/AuthContext";
-import API from "../api";
-import "./AdminPanel.css";
+import { AuthContext } from "../../../context/AuthContext";
+import API from "../../../api";
+import "../AdminPanel.css";
 
 const AdminPanel = () => {
   const navigate = useNavigate();

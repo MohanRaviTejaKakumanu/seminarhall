@@ -10,18 +10,29 @@ import {
 
 import { AuthContext } from "./context/AuthContext";
 
-import Navbar from "./components/Navbar";
-import LoginPage from "./components/LoginPage";
-import RegisterPage from "./components/RegisterPage";
-import ForgotPasswordPage from "./components/ForgotPasswordPage";
-import EventList from "./components/EventList";
-import EventDetails from "./components/EventDetails";
-import MyEvents from "./components/MyEvents";
-import EventCalendarView from "./components/EventCalendarView";
-import MapView from "./components/MapView";
-import HallEventsOnMap from "./components/HallEventsOnMap";
-import Notifications from "./components/Notifications";
-import AdminPanel from "./components/AdminPanel";
+// Shared Components
+import Navbar from "./shared/components/Navbar";
+
+// Auth Features
+import LoginPage from "./features/auth/pages/LoginPage";
+import RegisterPage from "./features/auth/pages/RegisterPage";
+import ForgotPasswordPage from "./features/auth/pages/ForgotPasswordPage";
+
+// Events Features
+import EventList from "./features/events/pages/EventList";
+import EventDetails from "./features/events/pages/EventDetails";
+import MyEvents from "./features/events/pages/MyEvents";
+import EventCalendarView from "./features/events/pages/EventCalendarView";
+
+// Maps Features
+import MapView from "./features/maps/pages/MapView";
+import HallEventsOnMap from "./features/maps/components/HallEventsOnMap";
+
+// Notifications Features
+import Notifications from "./features/notifications/pages/Notifications";
+
+// Admin Features
+import AdminPanel from "./features/admin/pages/AdminPanel";
 
 function Layout() {
   const { user } = useContext(AuthContext);
