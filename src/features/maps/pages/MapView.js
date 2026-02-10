@@ -122,57 +122,19 @@ const MapView = ({
                 type="button"
                 className="map-marker pointer-events-auto"
                 style={{
-                  left: `${m.x}%`,
-                  top: `${m.y}%`,
+                  left: `${m.x}px`,
+                  top: `${m.y}px`,
                   transform: "translate(-50%, -100%)",
                 }}
                 onClick={() => openMarker(m)}
                 title={m.title}
                 aria-label={`Open details for ${m.title}`}
               >
-                <span className="marker-dot">📍</span>
+                <span className={`marker-dot marker-${m.color || "red"}`}>
+                  📍
+                </span>
               </button>
             ))}
-          </div>
-        </div>
-
-        {/* Map Legend */}
-        <div className="map-legend mt-6 bg-white rounded-lg shadow-md p-4">
-          <h4 className="text-lg font-semibold mb-3">📍 Map Legend</h4>
-          <div className="legend-items">
-            <div className="legend-item">
-              <span className="legend-icon">📍</span>
-              <a
-                href="https://www.youtube.com/results?search_query=seminar+halls+college"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="legend-link"
-              >
-                Seminar Halls
-              </a>
-            </div>
-            <div className="legend-item">
-              <span className="legend-icon">🎓</span>
-              <a
-                href="https://www.youtube.com/results?search_query=college+events+tutorial"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="legend-link"
-              >
-                Events
-              </a>
-            </div>
-            <div className="legend-item">
-              <span className="legend-icon">📍</span>
-              <a
-                href="https://www.youtube.com/results?search_query=campus+navigation+guide"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="legend-link"
-              >
-                Campus Navigation
-              </a>
-            </div>
           </div>
         </div>
 
@@ -283,31 +245,34 @@ MapView.propTypes = {
 MapView.defaultProps = {
   markers: [
     {
-      id: "newton-hall",
-      hallId: "newton-hall",
-      x: 15,
-      y: 20,
-      title: "Newton Hall",
-      subtitle: "Seminar Hall",
-      description: "Newton Hall\n16.24765111, 80.4310964 | Alt: 33.17 m",
+      id: "left-building",
+      hallId: "left-building",
+      x: 401,
+      y: 337,
+      title: "Left Building",
+      subtitle: "Campus Structure",
+      description: "Left-side building structure",
+      color: "red",
     },
     {
-      id: "cv-raman-hall",
-      hallId: "cv-raman-hall",
-      x: 40,
-      y: 45,
-      title: "CV Raman Hall",
-      subtitle: "Seminar Hall",
-      description: "CV Raman Hall\n16.24773746, 80.43097479 | Alt: 33.05 m",
+      id: "central-courtyard",
+      hallId: "central-courtyard",
+      x: 734,
+      y: 720,
+      title: "Central Courtyard",
+      subtitle: "Common Area",
+      description: "Central courtyard area - open common space",
+      color: "blue",
     },
     {
-      id: "abdul-kalam-hall",
-      hallId: "abdul-kalam-hall",
-      x: 65,
-      y: 42,
-      title: "Abdul Kalam Hall",
-      subtitle: "Seminar Hall",
-      description: "Abdul Kalam Hall\n16.24772907, 80.4313729 | Alt: 33.45 m",
+      id: "right-structure",
+      hallId: "right-structure",
+      x: 1132,
+      y: 726,
+      title: "Right Structure",
+      subtitle: "Campus Building",
+      description: "Right-side structure/open area",
+      color: "yellow",
     },
   ],
   imageUrl: `${process.env.PUBLIC_URL}/Campus map.png`,
