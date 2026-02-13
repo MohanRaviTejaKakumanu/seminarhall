@@ -1,0 +1,60 @@
+.event-details {
+  padding: 20px;
+}
+
+.event-hero {
+  position: relative;
+  height: 280px;
+  border-radius: 18px;
+  overflow: hidden;
+  margin-bottom: 24px;
+}
+
+.event-hero-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(0,0,0,0.65), rgba(0,0,0,0.15));
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 24px;
+  color: white;
+}
+
+.hero-overlay h1 {
+  font-size: 2rem;
+  margin: 0;
+}
+
+.hero-category {
+  margin-top: 6px;
+  background: #6366f1;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  width: fit-content;
+}
+
+.details-container {
+  max-width: 1200px;
+  margin: auto;
+}
+
+.details-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 20px;
+}
+
+.registration-card {
+  background: white;
+  padding: 20px;
+  border-radius: 14px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+}

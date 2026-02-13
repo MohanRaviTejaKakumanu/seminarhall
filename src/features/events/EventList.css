@@ -186,3 +186,13 @@
   color: #888;
   cursor: not-allowed;
 }
+.event-card-img {
+  position: relative;
+}
+
+.event-banner {
+  width: 100%;
+  height: 170px;
+  object-fit: cover;
+  border-radius: 16px 16px 0 0;
+}
