@@ -38,8 +38,12 @@ const RegisterPage = () => {
     }
   };
 
+  const backgroundStyle = {
+    backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.45), rgba(0, 0, 0, 0.45)), url(/image.jpg)`
+  };
+
   return (
-    <div className="auth-bg">
+    <div className="auth-bg" style={backgroundStyle}>
       <div className="auth-card">
         <h2 className="auth-title">Create Account</h2>
         <p className="auth-subtitle">Register to continue</p>

@@ -7,9 +7,6 @@
 .auth-bg {
   min-height: 100vh;
   width: 100%;
-  background-image:
-    linear-gradient(rgba(0, 0, 0, 0.45), rgba(0, 0, 0, 0.45)),
-    url("D:\backend\Files (2)\frontend\public\image.jpg");
   background-size: cover;
   background-position: center;
   display: flex;
