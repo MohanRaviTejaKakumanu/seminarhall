@@ -14,6 +14,20 @@ body {
   background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
   min-height: 100vh;
   color: #333;
+  transition: background 0.3s ease, color 0.3s ease;
+}
+
+/* Dark Mode Styles - Apply to root wrapper */
+.dark-mode {
+  background: #1a1a1a !important;
+  color: #e5e7eb;
+  min-height: 100vh;
+}
+
+html.dark-mode,
+body.dark-mode {
+  background: #1a1a1a !important;
+  color: #e5e7eb;
 }
 
 .loading-container {
@@ -31,13 +45,12 @@ body {
 }
 
 .error-message {
-  background: #fee;
+  background: transparent;
   color: #c33;
   padding: 20px;
   border-radius: 10px;
   text-align: center;
   margin: 20px;
-  border-left: 4px solid #c33;
 }
 
 .main-layout {

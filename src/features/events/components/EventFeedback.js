@@ -1,8 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import API from "../../../api";
+import { ThemeContext } from "../../../context/ThemeContext";
 import "../EventFeedback.css";
 
 const EventFeedback = ({ eventId }) => {
+  const { isDarkMode } = useContext(ThemeContext);
   const [feedbacks, setFeedbacks] = useState([]);
   const [avgRating, setAvgRating] = useState(0);
   const [loading, setLoading] = useState(true);
@@ -40,12 +42,16 @@ const EventFeedback = ({ eventId }) => {
   }, [eventId]);
 
   if (loading) {
-    return <div className="feedback-section">⏳ Loading feedback...</div>;
+    return (
+      <div className={`feedback-section ${isDarkMode ? "dark-mode" : ""}`}>
+        ⏳ Loading feedback...
+      </div>
+    );
   }
 
   if (feedbacks.length === 0) {
     return (
-      <div className="feedback-section">
+      <div className={`feedback-section ${isDarkMode ? "dark-mode" : ""}`}>
         <h3>💬 Feedback</h3>
         <p>No feedback yet. Be the first to share your experience!</p>
       </div>
@@ -53,7 +59,7 @@ const EventFeedback = ({ eventId }) => {
   }
 
   return (
-    <div className="feedback-section">
+    <div className={`feedback-section ${isDarkMode ? "dark-mode" : ""}`}>
       <h3>💬 Event Feedback</h3>
 
       {/* Average Rating */}

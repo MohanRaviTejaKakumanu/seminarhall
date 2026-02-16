@@ -10,6 +10,7 @@
   position: sticky;
   top: 0;
   z-index: 1100;
+  justify-content: space-between;
 }
 
 .menu-btn {
@@ -23,6 +24,62 @@
 .logo {
   font-size: 18px;
   font-weight: 600;
+  flex-grow: 1;
+  margin-left: 10px;
+}
+
+/* Navbar Right - Notification and Dark Mode */
+.navbar-right {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.notif-link {
+  position: relative;
+  font-size: 24px;
+  text-decoration: none;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.2s ease;
+}
+
+.notif-link:hover {
+  transform: scale(1.1);
+}
+
+/* Notification badge */
+.notif-badge {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  background: #ff3b3b;
+  color: white;
+  font-size: 11px;
+  padding: 2px 6px;
+  border-radius: 999px;
+  font-weight: 700;
+}
+
+.theme-toggle-btn {
+  background: rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: white;
+  font-size: 18px;
+  padding: 8px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.theme-toggle-btn:hover {
+  background: rgba(255, 255, 255, 0.3);
+  transform: scale(1.1);
 }
 
 /* Sidebar */
@@ -115,3 +172,28 @@
   background: rgba(0,0,0,0.45);
   z-index: 1150;
 }
+
+/* ===== DARK MODE ===== */
+.navbar.dark-mode {
+  background: linear-gradient(90deg, #7b3fe4, #6a5cff);
+  box-shadow: 0 4px 16px rgba(123, 63, 228, 0.4);
+}
+
+.sidebar.dark-mode {
+  background: #2d2d2d;
+  box-shadow: 4px 0 20px rgba(0,0,0,0.5);
+}
+
+.sidebar.dark-mode .close-btn {
+  color: #d1d5db;
+}
+
+.sidebar.dark-mode a {
+  color: #d1d5db;
+}
+
+.sidebar.dark-mode a:hover {
+  background: #3a3a3a;
+  color: #ffffff;
+}
+

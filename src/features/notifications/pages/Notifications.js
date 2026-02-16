@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { useContext } from "react";
 import { AuthContext } from "../../../context/AuthContext";
+import { ThemeContext } from "../../../context/ThemeContext";
 import API from "../../../api";
 import "../Notifications.css";
 
 const Notifications = () => {
   const { user } = useContext(AuthContext);
+  const { isDarkMode } = useContext(ThemeContext);
   const [notifications, setNotifications] = useState([]);
   const [loading, setLoading] = useState(true);
   const [unreadCount, setUnreadCount] = useState(0);
@@ -66,7 +68,7 @@ const Notifications = () => {
   }
 
   return (
-    <div className="notifications-container">
+    <div className={`notifications-container ${isDarkMode ? "dark-mode" : ""}`}>
       <div className="notifications-header">
         <h2>🔔 Notifications</h2>
         {unreadCount > 0 && <span className="unread-badge">{unreadCount}</span>}

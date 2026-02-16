@@ -1,10 +1,12 @@
 .notifications-container {
   max-width: 600px;
   margin: 30px auto;
+  padding-bottom: 100px;
   background: white;
   border-radius: 8px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   overflow: hidden;
+  min-height: calc(100vh - 80px);
 }
 
 .notifications-header {
@@ -58,7 +60,7 @@
 .notification-item {
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: flex-start;
   padding: 15px 20px;
   border-bottom: 1px solid #f3f4f6;
   transition: all 0.2s;
@@ -127,4 +129,76 @@
 .btn-delete:hover {
   background: #fecaca;
   color: #ef4444;
+}
+
+/* ===== DARK MODE ===== */
+.notifications-container.dark-mode {
+  background: #2d2d2d !important;
+  color: #e5e7eb;
+  max-width: 600px;
+  margin: 30px auto;
+  padding-bottom: 100px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+}
+
+.notifications-container.dark-mode .notifications-header {
+  background: #3a3a3a;
+  border-bottom-color: #4a4a4a;
+  padding: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.notifications-container.dark-mode .notifications-header h2 {
+  color: #ffffff;
+  margin: 0;
+  font-size: 20px;
+}
+
+.notifications-container.dark-mode .notification-item {
+  border-bottom-color: #3a3a3a;
+  align-items: flex-start;
+}
+
+.notifications-container.dark-mode .notification-item.unread {
+  background: #3a3a3a;
+  border-left-color: #667eea;
+}
+
+.notifications-container.dark-mode .notification-item:hover {
+  background: #404040;
+}
+
+.notifications-container.dark-mode .notification-content h3 {
+  color: #ffffff;
+}
+
+.notifications-container.dark-mode .notification-content p {
+  color: #d1d5db;
+}
+
+.notifications-container.dark-mode .notification-content small {
+  background: #3a3a3a;
+  color: #9ca3af;
+}
+
+.notifications-container.dark-mode .btn-mark-read,
+.notifications-container.dark-mode .btn-action,
+.notifications-container.dark-mode .btn-delete {
+  color: #9ca3af;
+}
+
+.notifications-container.dark-mode .btn-mark-read:hover {
+  background: #4a4a4a;
+  color: #10b981;
+}
+
+.notifications-container.dark-mode .btn-action:hover {
+  color: #667eea;
+}
+
+.notifications-container.dark-mode .btn-delete:hover {
+  background: #5f2e2e;
+  color: #f87171;
 }

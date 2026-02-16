@@ -7,9 +7,14 @@ const API = axios.create({
 });
 // Interceptor to attach JWT token from localStorage to all requests
 API.interceptors.request.use((config) => {
-  const token = localStorage.getItem("token");
-  if (token) {
-    config.headers.Authorization = `Bearer ${token}`;
+  // read token from sessionStorage (ephemeral session storage)
+  try {
+    const token = sessionStorage.getItem("token");
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+  } catch (e) {
+    // ignore storage errors
   }
   return config;
 });
@@ -20,7 +25,11 @@ API.interceptors.response.use(
   (error) => {
     if (error.response?.status === 401) {
       // Clear token and redirect to login if unauthorized
-      localStorage.removeItem("token");
+      try {
+        sessionStorage.removeItem("token");
+      } catch (e) {
+        // ignore
+      }
       window.location.href = "/login";
     }
     return Promise.reject(error);

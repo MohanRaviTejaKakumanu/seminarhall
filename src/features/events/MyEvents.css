@@ -2,6 +2,7 @@
   max-width: 1200px;
   margin: 0 auto;
   padding: 30px 20px;
+  padding-bottom: 100px;
   background: #f8f9fa;
   min-height: 100vh;
 }
@@ -87,6 +88,19 @@
   animation: fadeIn 0.4s ease;
 }
 
+.my-event-card {
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.my-event-card:hover {
+  box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+  transform: translateY(-4px);
+}
+
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -105,4 +119,63 @@
   height: 180px;
   object-fit: cover;
   border-radius: 16px 16px 0 0;
+}
+
+/* ===== DARK MODE ===== */
+.my-events-container.dark-mode {
+  background: #1a1a1a !important;
+  color: #e5e7eb;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 30px 20px;
+  min-height: calc(100vh - 80px);
+}
+
+.my-events-container.dark-mode .my-events-header h1 {
+  color: #ffffff;
+}
+
+.my-events-container.dark-mode .my-events-header p {
+  color: #b3b3b3;
+}
+
+.my-events-container.dark-mode .user-greeting {
+  color: #a0c4ff !important;
+}
+
+.my-events-container.dark-mode .filter-btn {
+  background: #2d2d2d;
+  border-color: #4a4a4a;
+  color: #d1d5db;
+}
+
+.my-events-container.dark-mode .filter-btn:hover {
+  border-color: #667eea;
+  color: #667eea;
+}
+
+.my-events-container.dark-mode .filter-btn.active {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border-color: #667eea;
+}
+
+.my-events-container.dark-mode .no-events-message {
+  background: #2d2d2d;
+  color: #d1d5db;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+}
+
+.my-events-container.dark-mode .my-event-card {
+  background: #1a1a1a;
+  color: #e5e7eb;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+}
+
+.my-events-container.dark-mode .event-card-description {
+  color: #b3b3b3;
+}
+
+.my-events-container.dark-mode .loading {
+  color: #a0c4ff;
 }

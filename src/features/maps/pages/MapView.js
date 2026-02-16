@@ -1,5 +1,6 @@
 // frontend/src/features/maps/pages/MapView.js
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
+import { ThemeContext } from "../../../context/ThemeContext";
 import API from "../../../api";
 import PropTypes from "prop-types";
 import "../MapView.css";
@@ -17,6 +18,7 @@ const MapView = ({
   imageUrl = `${process.env.PUBLIC_URL}/Campus map.png`,
   markers = [],
 }) => {
+  const { isDarkMode } = useContext(ThemeContext);
   const [hallMarkers, setHallMarkers] = useState(markers);
   const [activeMarker, setActiveMarker] = useState(null);
   const [eventsByDate, setEventsByDate] = useState({});
@@ -103,7 +105,7 @@ const MapView = ({
   }, []);
 
   return (
-    <div className="mapview-root px-4 py-6">
+    <div className={`mapview-root px-4 py-6 ${isDarkMode ? "dark-mode" : ""}`}>
       <div className="mapview-wrapper max-w-6xl mx-auto">
         {/* Map area */}
         <div className="relative mapview-box">

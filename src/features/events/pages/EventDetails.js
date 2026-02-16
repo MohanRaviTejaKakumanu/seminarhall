@@ -3,13 +3,25 @@ import React, { useEffect, useState, useContext } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import API from "../../../api";
 import { AuthContext } from "../../../context/AuthContext";
+import { ThemeContext } from "../../../context/ThemeContext";
 import EventFeedback from "../components/EventFeedback";
 import "./EventDetails.css"; // ✅ CORRECT PATH
+
+// Helper function to convert 24-hour format to 12-hour AM/PM format
+const formatTime12Hour = (time24) => {
+  if (!time24) return "TBD";
+  const [hours, minutes] = time24.split(":");
+  const hour = parseInt(hours);
+  const ampm = hour >= 12 ? "PM" : "AM";
+  const hour12 = hour % 12 || 12;
+  return `${hour12}:${minutes} ${ampm}`;
+};
 
 const EventDetails = () => {
   const { eventId } = useParams();
   const navigate = useNavigate();
   const { user } = useContext(AuthContext);
+  const { isDarkMode } = useContext(ThemeContext);
 
   const [event, setEvent] = useState(null);
   const [message, setMessage] = useState("");
@@ -127,17 +139,40 @@ const EventDetails = () => {
   const hallName =
     typeof event.hall === "string" ? event.hall : event.hall?.name;
 
+  // Helper to get poster image
+  const getEventPoster = () => {
+    if (event?.banner) {
+      return event.banner.startsWith("http")
+        ? event.banner
+        : `${process.env.REACT_APP_API_URL}/${event.banner}`;
+    }
+    return "/default-event-banner.jpg";
+  };
+
   return (
-    <div className="event-details">
+    <div className={`event-details ${isDarkMode ? "dark-mode" : ""}`}>
       <button className="back-btn" onClick={() => navigate("/events")}>
         ← Back
       </button>
 
       <div className="details-container">
+        {/* Hero Section with Poster */}
+        <div className="event-hero">
+          <img
+            src={getEventPoster()}
+            alt={event.title}
+            className="event-hero-img"
+          />
+          <div className="hero-overlay">
+            <h1>{event.title}</h1>
+            {event.category && (
+              <span className="hero-category">{event.category}</span>
+            )}
+          </div>
+        </div>
+
         {/* Header */}
         <div className="details-header">
-          <h1>{event.title}</h1>
-
           <div className="badge-row">
             <span className={`badge status ${event.status}`}>
               {event.status.toUpperCase()}
@@ -163,7 +198,7 @@ const EventDetails = () => {
               <h3>📅 Schedule</h3>
               <p>Date: {new Date(event.date).toLocaleDateString()}</p>
               <p>
-                Time: {event.startTime} - {event.endTime}
+                Time: {formatTime12Hour(event.startTime)} - {formatTime12Hour(event.endTime)}
               </p>
             </section>
 
@@ -174,7 +209,13 @@ const EventDetails = () => {
 
             <section>
               <h3>👤 Organizer</h3>
-              <p>{event.organizerName}</p>
+              <p><strong>{event.organizerName}</strong></p>
+              {event.organizerContact && (
+                <p>Contact: {event.organizerContact}</p>
+              )}
+              {event.organizerInfo && (
+                <p>{event.organizerInfo}</p>
+              )}
             </section>
 
             <section>

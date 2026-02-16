@@ -99,3 +99,26 @@
     padding: 6px;
   }
 }
+
+/* ===== DARK MODE ===== */
+.mapview-root.dark-mode {
+  background: #1a1a1a;
+  color: #e5e7eb;
+}
+
+.mapview-root.dark-mode .map-modal {
+  background: rgba(0, 0, 0, 0.75);
+}
+
+.mapview-root.dark-mode .map-modal-card {
+  background: #2d2d2d;
+  color: #e5e7eb;
+}
+
+.mapview-root.dark-mode .map-modal-card h3 {
+  color: #ffffff;
+}
+
+.mapview-root.dark-mode .map-modal-card p {
+  color: #d1d5db;
+}

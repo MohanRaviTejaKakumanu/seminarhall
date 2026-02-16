@@ -1,11 +1,23 @@
 import React, { useEffect, useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../../../context/AuthContext";
+import { ThemeContext } from "../../../context/ThemeContext";
 import API from "../../../api";
 import "../MyEvents.css";
 
+// Helper function to convert 24-hour format to 12-hour AM/PM format
+const formatTime12Hour = (time24) => {
+  if (!time24) return "TBD";
+  const [hours, minutes] = time24.split(":");
+  const hour = parseInt(hours);
+  const ampm = hour >= 12 ? "PM" : "AM";
+  const hour12 = hour % 12 || 12;
+  return `${hour12}:${minutes} ${ampm}`;
+};
+
 const MyEvents = () => {
   const { user } = useContext(AuthContext);
+  const { isDarkMode } = useContext(ThemeContext);
   const navigate = useNavigate();
 
   const [registrations, setRegistrations] = useState([]);
@@ -88,7 +100,7 @@ const MyEvents = () => {
   ).length;
 
   return (
-    <div className="my-events-container">
+    <div className={`my-events-container ${isDarkMode ? "dark-mode" : ""}`}>
       {/* Header */}
       <div className="my-events-header">
         <h1>✨ My Events</h1>
@@ -110,7 +122,7 @@ const MyEvents = () => {
           className={`filter-btn ${filter === "past" ? "active" : ""}`}
           onClick={() => setFilter("past")}
         >
-          ✓ Attended ({pastCount})
+          ✓ Registered ({pastCount})
         </button>
         <button
           className={`filter-btn ${filter === "all" ? "active" : ""}`}
@@ -132,7 +144,7 @@ const MyEvents = () => {
             {filter === "upcoming"
               ? "No upcoming events. Explore and register!"
               : filter === "past"
-              ? "No past events yet."
+              ? "No registered events yet."
               : "You have not registered for any events."}
           </p>
           <button className="explore-btn" onClick={() => navigate("/events")}>
@@ -162,7 +174,7 @@ const MyEvents = () => {
                       backgroundColor: isPast ? "#6b7280" : "#10b981",
                     }}
                   >
-                    {isPast ? "COMPLETED" : event.status.toUpperCase()}
+                    {isPast ? "REGISTERED" : event.status.toUpperCase()}
                   </div>
 
                   {event.category && (
@@ -187,7 +199,7 @@ const MyEvents = () => {
                     <div className="info-item">
                       <span className="label">🕐 Time</span>
                       <span className="value">
-                        {event.startTime} - {event.endTime}
+                        {formatTime12Hour(event.startTime)} - {formatTime12Hour(event.endTime)}
                       </span>
                     </div>
                     <div className="info-item">

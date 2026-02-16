@@ -3,6 +3,7 @@
   max-width: 1200px;
   margin: 0 auto;
   padding: 28px;
+  padding-bottom: 100px;
   background: #f6f7fb;
   min-height: 100vh;
 }
@@ -17,7 +18,7 @@
 }
 
 .admin-header h1 {
-  font-size: 2.2rem;
+  font-size: 1.6rem;
   color: #1f2937;
   margin-bottom: 6px;
 }
@@ -33,23 +34,146 @@
   margin-bottom: 20px;
   border-radius: 12px;
   font-weight: 600;
+  background: transparent;
 }
 
 .admin-message.success {
-  background: #ecfdf5;
   color: #065f46;
 }
 
 .admin-message.error {
-  background: #fef2f2;
   color: #991b1b;
+}
+
+/* Dark mode messages */
+.admin-panel.dark-mode .admin-message.success {
+  color: #10b981;
+}
+
+.admin-panel.dark-mode .admin-message.error {
+  color: #ef4444;
 }
 
 /* Toolbar */
 .admin-toolbar {
-  margin-bottom: 24px;
+  margin-bottom: 16px;
   display: flex;
-  justify-content: flex-end;
+  justify-content: flex-end; /* position add button on right */
+  align-items: center;
+}
+
+/* removed admin tabs - Reports is accessible from sidebar only */
+
+.admin-search {
+  margin-bottom: 18px;
+}
+.admin-search input {
+  width: 100%;
+  max-width: 520px;
+  padding: 12px 14px;
+  border-radius: 12px;
+  border: 1px solid #e5e7eb;
+  background: white;
+}
+
+.manage-label {
+  display: inline-flex;
+  align-items: center;
+  padding: 8px 12px;
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+  font-weight: 700;
+  color: #374151;
+}
+
+/* Header actions (three-dot menu) */
+.admin-header {
+  position: relative;
+}
+.admin-actions {
+  position: absolute;
+  right: 20px;
+  top: 18px;
+  display: flex;
+  align-items: center;
+}
+.three-dot-btn {
+  background: transparent;
+  border: none;
+  font-size: 1.4rem;
+  cursor: pointer;
+  width: 40px;
+  height: 40px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border-radius: 8px;
+  outline: none;
+  color: #111827;
+}
+.three-dot-btn:hover {
+  background: rgba(0,0,0,0.04);
+}
+.actions-dropdown {
+  position: absolute;
+  right: 0;
+  top: calc(100% + 8px);
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+  display: flex;
+  flex-direction: column;
+  min-width: 160px;
+  z-index: 60;
+}
+.actions-dropdown button {
+  background: transparent;
+  border: none;
+  text-align: left;
+  padding: 10px 14px;
+  cursor: pointer;
+  font-weight: 600;
+}
+.actions-dropdown button:hover {
+  background: #f3f4f6;
+}
+.actions-dropdown.dark-mode {
+  background: #2d2d2d;
+}
+.actions-dropdown.dark-mode button:hover {
+  background: #3a3a3a;
+}
+
+.three-dot-btn:focus {
+  box-shadow: 0 0 0 4px rgba(99,102,241,0.12);
+}
+
+/* Dark / Light mode color adjustments for the three-dot control and dropdown */
+.dark-mode .three-dot-btn {
+  color: #e5e7eb;
+}
+
+.actions-dropdown {
+  color: #111827;
+}
+
+.actions-dropdown button {
+  color: inherit;
+  background: transparent;
+  border: none;
+  text-align: left;
+  padding: 10px 12px;
+}
+
+.actions-dropdown.dark-mode {
+  background: #111827;
+  color: #e5e7eb;
+}
+
+.actions-dropdown.dark-mode button {
+  color: #e5e7eb;
 }
 
 /* Add Event Button */
@@ -80,31 +204,74 @@
 }
 
 /* Form Layout */
+.event-form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
 .form-row {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-  gap: 16px;
-  margin-bottom: 16px;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 14px;
 }
 
 .form-group {
   display: flex;
   flex-direction: column;
+  gap: 6px;
 }
 
 .form-group label {
-  margin-bottom: 6px;
   font-weight: 600;
+  font-size: 0.9rem;
   color: #374151;
 }
 
 .form-group input,
 .form-group select,
 .form-group textarea {
-  padding: 12px;
-  border: 1px solid #d1d5db;
-  border-radius: 10px;
+  padding: 10px 12px;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
   font-size: 0.95rem;
+  color: #374151;
+  background: white;
+  font-family: inherit;
+}
+
+.form-group input::placeholder,
+.form-group select::placeholder,
+.form-group textarea::placeholder {
+  color: #9ca3af;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+  outline: none;
+  border-color: #6366f1;
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+}
+
+.form-group input[type="file"] {
+  padding: 8px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  background: white;
+  cursor: pointer;
+}
+
+.form-group textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
+.form-actions {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-start;
+  margin-top: 12px;
 }
 
 /* Submit Button */
@@ -112,11 +279,32 @@
   background: linear-gradient(135deg, #22c55e, #16a34a);
   color: white;
   border: none;
-  padding: 12px 26px;
-  border-radius: 14px;
-  font-size: 1rem;
-  font-weight: 700;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  font-weight: 600;
   cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-submit:hover {
+  box-shadow: 0 4px 12px rgba(34, 197, 94, 0.3);
+}
+
+.btn-cancel {
+  background: #e5e7eb;
+  color: #374151;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-cancel:hover {
+  background: #d1d5db;
 }
 
 /* Events Section */
@@ -132,25 +320,353 @@
   color: #111827;
 }
 
-/* Table */
-.events-table table {
-  width: 100%;
-  border-collapse: separate;
-  border-spacing: 0 10px;
-  font-size: 0.9rem;
+/* When viewing Reports & Insights, hide the Manage UI (search, add form, event grid) */
+.admin-panel.reports-active .admin-search,
+.admin-panel.reports-active .events-section,
+.admin-panel.reports-active .admin-toolbar,
+.admin-panel.reports-active .add-event-form {
+  display: none !important;
 }
 
-.events-table th {
+.admin-panel.reports-active .admin-header {
+  /* keep header visible but slightly reduced spacing */
+  margin-bottom: 18px;
+}
+
+/* When viewing calendar inside Admin Panel, hide Manage UI */
+.admin-panel.calendar-active .admin-search,
+.admin-panel.calendar-active .events-section,
+.admin-panel.calendar-active .admin-toolbar,
+.admin-panel.calendar-active .add-event-form {
+  display: none !important;
+}
+
+/* Reports Section */
+.reports-view {
+  background: white;
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
+
+.reports-tabs {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 24px;
+  border-bottom: 2px solid #e5e7eb;
+}
+
+.tab-btn {
+  background: transparent;
+  border: none;
+  padding: 12px 16px;
+  font-size: 1rem;
+  font-weight: 600;
   color: #6b7280;
-  font-weight: 700;
-  padding: 10px;
+  cursor: pointer;
+  border-bottom: 3px solid transparent;
+  transition: all 0.2s;
 }
 
-.events-table td {
-  background: #f9fafb;
-  padding: 14px;
-  border-radius: 10px;
+.tab-btn.active {
+  color: #374151;
+  border-bottom-color: #6366f1;
 }
+
+.tab-btn:hover {
+  color: #111827;
+}
+
+/* Statistics Cards Grid */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+  margin-bottom: 32px;
+}
+
+.stat-card {
+  background: #f9fafb;
+  border-radius: 12px;
+  padding: 18px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  transition: transform 0.2s;
+}
+
+.stat-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
+
+.stat-icon {
+  font-size: 2.5rem;
+  min-width: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.stat-content {
+  flex: 1;
+}
+
+.stat-label {
+  font-size: 0.85rem;
+  color: #6b7280;
+  margin-bottom: 4px;
+  font-weight: 500;
+}
+
+.stat-value {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #111827;
+}
+
+/* Report Section */
+.report-section {
+  margin-bottom: 32px;
+  padding: 20px;
+  background: white;
+  border-radius: 12px;
+  border: 1px solid #e5e7eb;
+}
+
+.report-section h3 {
+  font-size: 1.2rem;
+  margin: 0 0 20px;
+  color: #111827;
+  font-weight: 700;
+}
+
+/* Most Popular Events */
+.popular-events-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.popular-event-item {
+  display: grid;
+  grid-template-columns: 30px 1fr auto 80px;
+  gap: 12px;
+  align-items: center;
+  padding: 12px;
+  background: #f9fafb;
+  border-radius: 8px;
+}
+
+.popup-rank {
+  font-weight: 700;
+  font-size: 1.1rem;
+  color: #6366f1;
+  text-align: center;
+}
+
+.popup-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.popup-title {
+  font-weight: 600;
+  color: #111827;
+  font-size: 0.95rem;
+}
+
+.popup-dept {
+  font-size: 0.85rem;
+  color: #6b7280;
+}
+
+.popup-bar {
+  height: 8px;
+  background: #e5e7eb;
+  border-radius: 4px;
+  overflow: hidden;
+  min-width: 150px;
+}
+
+.popup-bar-fill {
+  height: 100%;
+  background: linear-gradient(to right, #10b981, #34d399);
+  border-radius: 4px;
+  transition: width 0.3s ease;
+}
+
+.popup-count {
+  font-weight: 700;
+  color: #374151;
+  text-align: right;
+  font-size: 0.95rem;
+}
+
+/* Events by Department */
+.events-by-dept-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.dept-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px;
+  background: #f9fafb;
+  border-radius: 8px;
+  border: 1px solid #e5e7eb;
+}
+
+.dept-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.dept-name {
+  font-weight: 600;
+  color: #111827;
+  font-size: 0.95rem;
+}
+
+.dept-event-count {
+  font-size: 0.85rem;
+  color: #6b7280;
+}
+
+.dept-registrations {
+  font-weight: 700;
+  color: #374151;
+  text-align: right;
+}
+
+/* Table */
+/* Card-based events */
+.event-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 12px;
+}
+
+.event-card {
+  background: #ffffff;
+  border-radius: 10px;
+  padding: 10px; /* reduced padding to shorten card height */
+  box-shadow: 0 6px 16px rgba(0,0,0,0.05);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.event-card .card-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.status-pill {
+  background: #10b98120;
+  color: #065f46;
+  padding: 6px 10px;
+  border-radius: 999px;
+  font-weight: 700;
+  font-size: 0.85rem;
+}
+
+.card-actions .three-dot-btn {
+  width: 36px;
+  height: 36px;
+  font-size: 1rem;
+  border-radius: 8px;
+}
+
+/* Dropdown Menu in Card */
+.three-dot-menu {
+  position: relative;
+}
+
+.dropdown-menu {
+  position: absolute;
+  right: 0;
+  top: 100%;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 8px 16px rgba(0,0,0,0.12);
+  display: flex;
+  flex-direction: column;
+  min-width: 160px;
+  z-index: 50;
+  margin-top: 4px;
+}
+
+.menu-item {
+  background: transparent;
+  border: none;
+  padding: 12px 14px;
+  text-align: left;
+  cursor: pointer;
+  font-size: 0.95rem;
+  color: #374151;
+  font-weight: 500;
+  transition: background 0.2s;
+}
+
+.menu-item:hover {
+  background: #f3f4f6;
+}
+
+.menu-item.delete-item {
+  color: #dc2626;
+  border-top: 1px solid #e5e7eb;
+}
+
+.menu-item.delete-item:hover {
+  background: #fef2f2;
+}
+
+.menu-item:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.card-content .event-title {
+  font-size: 0.95rem;
+  margin: 0 0 4px;
+  color: #111827;
+}
+
+.event-dept {
+  color: #6b7280;
+  font-size: 0.9rem;
+  margin: 0 0 8px;
+}
+
+.event-meta {
+  display: flex;
+  gap: 12px;
+  color: #6b7280;
+  font-size: 0.9rem;
+  margin-bottom: 8px;
+}
+
+.registrations {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 6px;
+  align-items: center;
+}
+.reg-label { color: #6b7280; font-weight:600 }
+.reg-count { font-weight:700; color:#374151; }
+.reg-bar { grid-column: 1 / -1; height: 10px; background: #f3f4f6; border-radius: 8px; overflow:hidden; }
+.reg-fill { height: 100%; border-radius: 8px; transition: width 0.35s ease; }
+
+/* Button container below grid */
+
 
 /* Status Badge */
 .status-badge {
@@ -194,4 +710,412 @@
   object-fit: cover;
   border-radius: 14px;
   border: 1px solid #ddd;
+}
+
+.pdf-preview {
+  margin-top: 10px;
+  padding: 12px 16px;
+  background: #f3f4f6;
+  border: 2px dashed #d1d5db;
+  border-radius: 8px;
+  color: #374151;
+  font-weight: 500;
+  text-align: center;
+}
+
+/* ===== DARK MODE ===== */
+.admin-panel.dark-mode {
+  background: #1a1a1a !important;
+  color: #e5e7eb;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 28px;
+  min-height: calc(100vh - 80px);
+}
+
+.admin-panel.dark-mode .admin-header {
+  background: #2d2d2d;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+}
+
+.admin-panel.dark-mode .admin-header h1 {
+  color: #ffffff;
+}
+
+.admin-panel.dark-mode .admin-header .subtitle {
+  color: #b3b3b3;
+}
+
+.admin-panel.dark-mode .admin-message.success {
+  color: #10b981;
+}
+
+.admin-panel.dark-mode .admin-message.error {
+  color: #ef4444;
+}
+
+.admin-panel.dark-mode .add-event-form {
+  background: #2d2d2d;
+  box-shadow: 0 12px 30px rgba(0,0,0,0.5);
+}
+
+.admin-panel.dark-mode .add-event-form h3 {
+  color: #ffffff;
+}
+
+.admin-panel.dark-mode .form-group label {
+  color: #d1d5db;
+}
+
+.admin-panel.dark-mode .form-group input,
+.admin-panel.dark-mode .form-group select,
+.admin-panel.dark-mode .form-group textarea {
+  background: #3a3a3a;
+  border: 1px solid #4a4a4a;
+  color: #e5e7eb;
+}
+
+.admin-panel.dark-mode .form-group input::placeholder,
+.admin-panel.dark-mode .form-group textarea::placeholder {
+  color: #9ca3af;
+}
+
+.admin-panel.dark-mode .btn-submit {
+  background: linear-gradient(135deg, #22c55e, #16a34a);
+  color: white;
+  border: none;
+}
+
+.admin-panel.dark-mode .events-section {
+  background: #2d2d2d;
+  box-shadow: 0 12px 30px rgba(0,0,0,0.5);
+}
+
+.admin-panel.dark-mode .events-section h3 {
+  color: #ffffff;
+}
+
+.admin-panel.dark-mode .events-table th {
+  color: #d1d5db;
+}
+
+.admin-panel.dark-mode .events-table td {
+  background: #3a3a3a;
+  color: #e5e7eb;
+}
+
+.admin-panel.dark-mode .status-badge.active {
+  background: #064e3b;
+  color: #a7f3d0;
+}
+
+.admin-panel.dark-mode .status-badge.completed {
+  background: #0c4a6e;
+  color: #7dd3fc;
+}
+
+.admin-panel.dark-mode .status-badge.cancelled {
+  background: #7f1d1d;
+  color: #fca5a5;
+}
+
+/* Dark mode dropdown menu */
+.admin-panel.dark-mode .dropdown-menu {
+  background: #2d2d2d;
+  box-shadow: 0 8px 16px rgba(0,0,0,0.5);
+}
+
+.admin-panel.dark-mode .menu-item {
+  color: #e5e7eb;
+}
+
+.admin-panel.dark-mode .menu-item:hover {
+  background: #3a3a3a;
+}
+
+.admin-panel.dark-mode .menu-item.delete-item {
+  color: #f87171;
+  border-top-color: #4a4a4a;
+}
+
+.admin-panel.dark-mode .menu-item.delete-item:hover {
+  background: #5a2c2c;
+}
+
+/* Dark mode event cards */
+.admin-panel.dark-mode .event-card {
+  background: #2d2d2d;
+  box-shadow: 0 6px 16px rgba(0,0,0,0.3);
+}
+
+.admin-panel.dark-mode .event-card .event-title {
+  color: #ffffff;
+}
+
+.admin-panel.dark-mode .event-card .event-dept {
+  color: #b3b3b3;
+}
+
+.admin-panel.dark-mode .event-card .event-meta {
+  color: #b3b3b3;
+}
+
+.admin-panel.dark-mode .reg-label {
+  color: #b3b3b3;
+}
+
+.admin-panel.dark-mode .reg-count {
+  color: #e5e7eb;
+}
+
+.admin-panel.dark-mode .reg-bar {
+  background: #3a3a3a;
+}
+
+.admin-panel.dark-mode .btn-delete {
+  background: #ef4444;
+  color: white;
+}
+
+.admin-panel.dark-mode .banner-preview {
+  border: 1px solid #4a4a4a;
+}
+
+.admin-panel.dark-mode .pdf-preview {
+  background: #3a3a3a;
+  border-color: #4a4a4a;
+  color: #e5e7eb;
+}
+
+/* Reports Grid */
+.reports-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 18px;
+  margin-bottom: 28px;
+}
+
+.report-card {
+  background: white;
+  border-radius: 14px;
+  padding: 20px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.report-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+}
+
+.report-icon {
+  font-size: 2.5rem;
+  min-height: 60px;
+  min-width: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.report-content {
+  flex: 1;
+}
+
+.report-label {
+  font-size: 0.9rem;
+  color: #666;
+  margin: 0 0 4px;
+  font-weight: 500;
+}
+
+.report-value {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #111;
+  margin: 0;
+}
+
+/* Bar Chart */
+.chart-container {
+  background: white;
+  border-radius: 14px;
+  padding: 24px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  margin-bottom: 28px;
+}
+
+.chart-container h3 {
+  margin: 0 0 20px;
+  color: #111;
+  font-size: 1.2rem;
+}
+
+.bar-chart {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.bar-item {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.bar-label {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.9rem;
+}
+
+.event-name {
+  font-weight: 600;
+  color: #374151;
+}
+
+.event-count {
+  color: #6b7280;
+  font-size: 0.85rem;
+}
+
+.bar-background {
+/* toolbar-actions: holds header toolbar button(s) next to manage label */
+.toolbar-actions {
+  margin-left: 16px;
+}
+  width: 100%;
+  height: 24px;
+  background: #e5e7eb;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #6366f1, #7c3aed);
+  border-radius: 8px;
+  transition: width 0.3s ease;
+  min-width: 2px;
+}
+
+/* Dark Mode Reports */
+.admin-panel.dark-mode .report-card {
+  background: #2d2d2d;
+  color: #e5e7eb;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.admin-panel.dark-mode .report-label {
+  color: #b3b3b3;
+}
+
+.admin-panel.dark-mode .report-value {
+  color: #ffffff;
+}
+
+.admin-panel.dark-mode .chart-container {
+  background: #2d2d2d;
+  color: #e5e7eb;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.admin-panel.dark-mode .chart-container h3 {
+  color: #ffffff;
+}
+
+.admin-panel.dark-mode .event-name {
+  color: #e5e7eb;
+}
+
+.admin-panel.dark-mode .event-count {
+  color: #9ca3af;
+}
+
+.admin-panel.dark-mode .bar-background {
+  background: #3a3a3a;
+}
+
+/* Dark mode reports */
+.admin-panel.dark-mode .reports-view {
+  background: #2d2d2d;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+}
+
+.admin-panel.dark-mode .reports-tabs {
+  border-bottom-color: #4a4a4a;
+}
+
+.admin-panel.dark-mode .tab-btn {
+  color: #a0a0a0;
+}
+
+.admin-panel.dark-mode .tab-btn.active {
+  color: #e5e7eb;
+}
+
+.admin-panel.dark-mode .stat-card {
+  background: #3a3a3a;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+}
+
+.admin-panel.dark-mode .stat-label {
+  color: #a0a0a0;
+}
+
+.admin-panel.dark-mode .stat-value {
+  color: #e5e7eb;
+}
+
+.admin-panel.dark-mode .report-section {
+  background: #3a3a3a;
+  border-color: #4a4a4a;
+}
+
+.admin-panel.dark-mode .report-section h3 {
+  color: #e5e7eb;
+}
+
+.admin-panel.dark-mode .popular-event-item {
+  background: #4a4a4a;
+}
+
+.admin-panel.dark-mode .popup-rank {
+  color: #818cf8;
+}
+
+.admin-panel.dark-mode .popup-title {
+  color: #e5e7eb;
+}
+
+.admin-panel.dark-mode .popup-dept {
+  color: #a0a0a0;
+}
+
+.admin-panel.dark-mode .popup-bar {
+  background: #5a5a5a;
+}
+
+.admin-panel.dark-mode .popup-count {
+  color: #d1d5db;
+}
+
+.admin-panel.dark-mode .dept-item {
+  background: #4a4a4a;
+  border-color: #5a5a5a;
+}
+
+.admin-panel.dark-mode .dept-name {
+  color: #e5e7eb;
+}
+
+.admin-panel.dark-mode .dept-event-count {
+  color: #a0a0a0;
+}
+
+.admin-panel.dark-mode .dept-registrations {
+  color: #d1d5db;
 }

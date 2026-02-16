@@ -11,6 +11,7 @@ const RegisterPage = () => {
     role: "student",
     name: "",
     email: "",
+    phone: "",
     password: "",
     confirmPassword: "",
   });
@@ -29,7 +30,7 @@ const RegisterPage = () => {
 
     setLoading(true);
     try {
-      await register(form.name, form.email, form.password, form.role);
+      await register(form.name, form.email, form.password, form.phone, form.role);
       navigate("/login");
     } catch (err) {
       setError(err?.response?.data?.msg || "Registration failed");
@@ -86,6 +87,17 @@ const RegisterPage = () => {
               onChange={(e) => setForm({ ...form, email: e.target.value })}
             />
             <label>Email</label>
+          </div>
+
+          {/* Phone Number */}
+          <div className="input-group">
+            <input
+              type="tel"
+              required
+              value={form.phone}
+              onChange={(e) => setForm({ ...form, phone: e.target.value })}
+            />
+            <label>Phone Number</label>
           </div>
 
           {/* Password */}

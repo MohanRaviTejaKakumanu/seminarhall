@@ -1,10 +1,12 @@
 import React, { useEffect, useState, useContext } from "react";
 import { AuthContext } from "../../../context/AuthContext";
+import { ThemeContext } from "../../../context/ThemeContext";
 import API from "../../../api";
 import "../EventList.css";
 
 export default function EventList() {
   const { user } = useContext(AuthContext);
+  const { isDarkMode } = useContext(ThemeContext);
 
   const [events, setEvents] = useState([]);
   const [filteredEvents, setFilteredEvents] = useState([]);
@@ -33,39 +35,50 @@ export default function EventList() {
   };
 
   // Fetch events
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        setLoading(true);
+  const fetchData = async () => {
+    try {
+      setLoading(true);
 
-        const eventsRes = await API.get("/events");
-        const eventData = eventsRes.data || [];
+      const eventsRes = await API.get("/events");
+      const eventData = eventsRes.data || [];
 
-        const approvedEvents = eventData.filter(
-          (e) => e.status === "active" && e.approved !== false
-        );
+      const approvedEvents = eventData.filter(
+        (e) => e.status === "active" && e.approved !== false
+      );
 
-        setEvents(approvedEvents);
-        setFilteredEvents(approvedEvents);
+      setEvents(approvedEvents);
+      setFilteredEvents(approvedEvents);
 
-        const hallsRes = await API.get("/halls");
-        setHalls(hallsRes.data || []);
+      const hallsRes = await API.get("/halls");
+      setHalls(hallsRes.data || []);
 
-        const uniqueCategories = [
-          ...new Set(approvedEvents.map((e) => e.category).filter(Boolean)),
-        ];
-        setCategories(uniqueCategories);
+      const uniqueCategories = [
+        ...new Set(approvedEvents.map((e) => e.category).filter(Boolean)),
+      ];
+      setCategories(uniqueCategories);
 
-        setError(null);
-      } catch (err) {
-        console.error(err);
-        setError("Failed to load events. Please try again.");
-      } finally {
-        setLoading(false);
+      setError(null);
+    } catch (err) {
+      console.error("Error fetching events:", err);
+      if (err.message === "Network Error") {
+        setError("❌ Network Error: Unable to connect to server. Please check if the backend is running on port 5000.");
+      } else if (err.response?.status === 401) {
+        setError("❌ Unauthorized. Please login again.");
+      } else if (err.response?.status === 403) {
+        setError("❌ Access Denied.");
+      } else if (err.response?.status === 500) {
+        setError("❌ Server Error. Please try again later.");
+      } else {
+        setError("❌ Failed to load events. Please try again later.");
       }
-    };
+    } finally {
+      setLoading(false);
+    }
+  };
 
+  useEffect(() => {
     fetchData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // Apply filters
@@ -123,19 +136,21 @@ export default function EventList() {
     return colors[status] || "#6b7280";
   };
 
-  if (error) {
-    return (
-      <div className="events-page">
-        <h2>🎉 Discover Events</h2>
-        <div className="error-message">{error}</div>
-      </div>
-    );
-  }
+  // don't early-return on error; render header + filters and show a clear banner
+  // and fallback placeholders so the page layout remains visible even offline
 
   return (
-    <div className="events-page">
+    <div className={`events-page ${isDarkMode ? "dark-mode" : ""}`}>
       <h2>🎉 Discover Events</h2>
       <p className="subtitle">Find and register for amazing college events</p>
+      {error && (
+        <div className="error-message" role="alert" style={{marginBottom:12, display:'flex', alignItems:'center', justifyContent:'space-between'}}>
+          <div>{error}</div>
+          <div>
+            <button className="filter-btn" onClick={() => fetchData()} style={{marginRight:8}}>Retry</button>
+          </div>
+        </div>
+      )}
 
       {/* Filters */}
       <div className="filters">

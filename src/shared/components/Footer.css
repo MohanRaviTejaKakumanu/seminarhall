@@ -1,0 +1,32 @@
+.footer {
+  position: fixed;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 12px 20px;
+  background-color: transparent;
+  z-index: 100;
+  max-width: 500px;
+  width: auto;
+}
+
+.footer-text {
+  margin: 0;
+  font-size: 12px;
+  color: #666;
+  text-align: center;
+  font-weight: 500;
+}
+
+/* Dark mode */
+.footer.dark-mode {
+  background-color: transparent;
+}
+
+.footer.dark-mode .footer-text {
+  color: #aaa;
+}
+
