@@ -21,10 +21,8 @@ import RegisterPage from "./features/auth/pages/RegisterPage";
 import ForgotPasswordPage from "./features/auth/pages/ForgotPasswordPage";
 
 // Events Features
-import EventList from "./features/events/pages/EventList";
-import EventDetails from "./features/events/pages/EventDetails";
-import MyEvents from "./features/events/pages/MyEvents";
-import EventCalendarView from "./features/events/pages/EventCalendarView";
+import StudentPanel from "./features/studentpanel/studentpanel";
+import EventsPage from "./features/events/pages/EventsPage";
 
 // Maps Features
 import MapView from "./features/maps/pages/MapView";
@@ -78,17 +76,7 @@ function Layout() {
           element={
             user
               ? user.role === "student"
-                ? <EventList />
-                : <Navigate to="/admin" replace />
-              : <Navigate to="/login" replace />
-          }
-        />
-        <Route
-          path="/event/:eventId"
-          element={
-            user
-              ? user.role === "student"
-                ? <EventDetails />
+                ? <StudentPanel />
                 : <Navigate to="/admin" replace />
               : <Navigate to="/login" replace />
           }
@@ -98,17 +86,7 @@ function Layout() {
           element={
             user
               ? user.role === "student"
-                ? <MyEvents />
-                : <Navigate to="/admin" replace />
-              : <Navigate to="/login" replace />
-          }
-        />
-        <Route
-          path="/calendar"
-          element={
-            user
-              ? user.role === "student"
-                ? <EventCalendarView />
+                ? <EventsPage />
                 : <Navigate to="/admin" replace />
               : <Navigate to="/login" replace />
           }
@@ -137,9 +115,9 @@ function Layout() {
           path="/notifications"
           element={
             user
-              ? user.role === "student"
+              ? (user.role === "student" || user.role === "admin")
                 ? <Notifications />
-                : <Navigate to="/admin" replace />
+                : <Navigate to="/events" replace />
               : <Navigate to="/login" replace />
           }
         />

@@ -1,7 +1,6 @@
 import React, { useEffect, useState, useContext } from "react";
 import API from "../../../api";
 import { ThemeContext } from "../../../context/ThemeContext";
-import "../EventFeedback.css";
 
 const EventFeedback = ({ eventId }) => {
   const { isDarkMode } = useContext(ThemeContext);

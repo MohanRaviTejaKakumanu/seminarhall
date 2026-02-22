@@ -1,4 +1,4 @@
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../../context/AuthContext";
 import { ThemeContext } from "../../context/ThemeContext";
@@ -9,8 +9,25 @@ export default function Navbar() {
   const { user, logout } = useContext(AuthContext);
   const { isDarkMode, toggleTheme } = useContext(ThemeContext);
   const navigate = useNavigate();
+  const location = useLocation();
   const [unreadCount, setUnreadCount] = useState(0);
-  const [open, setOpen] = useState(false);
+  const [sidebarOpen, setSidebarOpen] = useState(true);
+
+  // Update body class for sidebar state
+  useEffect(() => {
+    if (!sidebarOpen) {
+      document.body.classList.add('sidebar-collapsed');
+    } else {
+      document.body.classList.remove('sidebar-collapsed');
+    }
+    return () => {
+      document.body.classList.remove('sidebar-collapsed');
+    };
+  }, [sidebarOpen]);
+
+  const toggleSidebar = () => {
+    setSidebarOpen(!sidebarOpen);
+  };
 
   // Fetch unread notifications count
   useEffect(() => {
@@ -39,8 +56,7 @@ export default function Navbar() {
   return (
     <>
       {/* Top Navbar */}
-      <nav className={`navbar ${isDarkMode ? "dark-mode" : ""}`}>
-        <button className="menu-btn" onClick={() => setOpen(true)}>☰</button>
+      <nav className={`navbar ${sidebarOpen ? "sidebar-open" : "sidebar-collapsed"} ${isDarkMode ? "dark-mode" : ""}`}>
         <h2 className="logo">🎓 College Events</h2>
         
         {/* Right side items - Notification and Dark Mode */}
@@ -62,35 +78,96 @@ export default function Navbar() {
       </nav>
 
       {/* Sidebar */}
-      <div className={`sidebar ${open ? "open" : ""} ${isDarkMode ? "dark-mode" : ""}`}>
-        <button className="close-btn" onClick={() => setOpen(false)}>✖</button>
+      <div className={`sidebar ${sidebarOpen ? "open" : "closed"} ${isDarkMode ? "dark-mode" : ""}`}>
+        {/* Sidebar Header */}
+        <div className="sidebar-header" onClick={toggleSidebar}>
+          <div className="sidebar-brand">
+            <div className="brand-icon">{user?.role === "admin" ? "⚙️" : "🎓"}</div>
+            <div className="brand-text">
+              <div className="brand-name">{user?.role === "admin" ? "Admin Panel" : "SeminarHub"}</div>
+              {user?.role !== "admin" && <div className="brand-subtitle">Student Dashboard</div>}
+            </div>
+          </div>
+        </div>
 
-        {user?.role === "student" && (
-          <>
-            <Link to="/events" onClick={() => setOpen(false)}>Events</Link>
-            <Link to="/my-events" onClick={() => setOpen(false)}>My Events</Link>
-            <Link to="/calendar" onClick={() => setOpen(false)}>Event Calendar</Link>
-            <Link to="/map" onClick={() => setOpen(false)}>Map</Link>
-          </>
-        )}
+        {/* Sidebar Menu */}
+        <div className="sidebar-menu">
+          {user?.role === "student" && (
+            <>
+              <Link 
+                to="/events" 
+                className={`sidebar-link ${location.pathname === "/events" ? "active" : ""}`}
+              >
+                <span className="link-icon">🏠</span>
+                <span className="link-text">Dashboard</span>
+              </Link>
+              <Link 
+                to="/my-events" 
+                className={`sidebar-link ${location.pathname === "/my-events" ? "active" : ""}`}
+              >
+                <span className="link-icon">📋</span>
+                <span className="link-text">Events</span>
+              </Link>
+              <Link 
+                to="/calendar" 
+                className={`sidebar-link ${location.pathname === "/calendar" ? "active" : ""}`}
+              >
+                <span className="link-icon">📅</span>
+                <span className="link-text">Calendar</span>
+              </Link>
+              <Link 
+                to="/map" 
+                className={`sidebar-link ${location.pathname === "/map" ? "active" : ""}`}
+              >
+                <span className="link-icon">🗺️</span>
+                <span className="link-text">Map</span>
+              </Link>
+            </>
+          )}
 
-        {user?.role === "admin" && (
-          <>
-            <Link to="/admin" onClick={() => setOpen(false)}>
-              🎛️ Admin Panel
-            </Link>
-            <Link to="/admin?tab=calendar" onClick={() => setOpen(false)}>Event Calendar</Link>
-            <Link to="/admin?tab=reports" onClick={() => setOpen(false)}>📊 Reports & Insights</Link>
-          </>
-        )}
+          {user?.role === "admin" && (
+            <>
+              <Link 
+                to="/admin" 
+                className={`sidebar-link ${location.pathname === "/admin" && !location.search ? "active" : ""}`}
+              >
+                <span className="link-icon">🏠</span>
+                <span className="link-text">Dashboard</span>
+              </Link>
+              <Link 
+                to="/admin?tab=manage-events" 
+                className={`sidebar-link ${location.search.includes("tab=manage-events") ? "active" : ""}`}
+              >
+                <span className="link-icon">📝</span>
+                <span className="link-text">Manage Events</span>
+              </Link>
+              <Link 
+                to="/admin?tab=calendar" 
+                className={`sidebar-link ${location.search.includes("tab=calendar") ? "active" : ""}`}
+              >
+                <span className="link-icon">📅</span>
+                <span className="link-text">Event Calendar</span>
+              </Link>
+              <Link 
+                to="/admin?tab=reports" 
+                className={`sidebar-link ${location.search.includes("tab=reports") ? "active" : ""}`}
+              >
+                <span className="link-icon">📊</span>
+                <span className="link-text">Reports</span>
+              </Link>
+            </>
+          )}
+        </div>
 
-        <button className="logout-btn sidebar-logout" onClick={handleLogout}>
-          Logout
+        {/* Logout Button */}
+        <button className="sidebar-logout" onClick={handleLogout}>
+          <span className="logout-icon">↩️</span>
+          <span className="logout-text">Logout</span>
         </button>
       </div>
 
-      {/* Overlay */}
-      {open && <div className="overlay" onClick={() => setOpen(false)} />}
+      {/* Overlay for mobile */}
+      {sidebarOpen && window.innerWidth < 768 && <div className="overlay" onClick={() => setSidebarOpen(false)} />}
     </>
   );
 }

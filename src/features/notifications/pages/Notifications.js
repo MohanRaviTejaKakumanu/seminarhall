@@ -11,6 +11,9 @@ const Notifications = () => {
   const [notifications, setNotifications] = useState([]);
   const [loading, setLoading] = useState(true);
   const [unreadCount, setUnreadCount] = useState(0);
+  const [selectedNotification, setSelectedNotification] = useState(null);
+  const [registrations, setRegistrations] = useState([]);
+  const [registrationsLoading, setRegistrationsLoading] = useState(false);
 
   // Fetch notifications for the user
   useEffect(() => {
@@ -53,11 +56,36 @@ const Notifications = () => {
     }
   };
 
+  // Fetch registrations for a notification (admin only)
+  const fetchRegistrations = async (notificationId) => {
+    try {
+      setRegistrationsLoading(true);
+      const res = await API.get(`/notifications/${notificationId}/registrations`);
+      setRegistrations(res.data || []);
+    } catch (err) {
+      console.error("Error fetching registrations:", err);
+      setRegistrations([]);
+    } finally {
+      setRegistrationsLoading(false);
+    }
+  };
+
+  // Handle notification click for admin
+  const handleNotificationClick = (notification) => {
+    setSelectedNotification(notification);
+    if (user?.role === "admin" && notification._id) {
+      fetchRegistrations(notification._id);
+    }
+  };
+
   // Delete notification
   const deleteNotification = async (notificationId) => {
     try {
       await API.delete(`/notifications/${notificationId}`);
       setNotifications((prev) => prev.filter((n) => n._id !== notificationId));
+      if (selectedNotification?._id === notificationId) {
+        setSelectedNotification(null);
+      }
     } catch (err) {
       console.error("Error deleting notification:", err);
     }
@@ -65,6 +93,50 @@ const Notifications = () => {
 
   if (loading) {
     return <div className="notifications-spinner">Loading...</div>;
+  }
+
+  // Admin view: Show selected notification with registrations
+  if (user?.role === "admin" && selectedNotification) {
+    return (
+      <div className={`notifications-container ${isDarkMode ? "dark-mode" : ""}`}>
+        <div className="notifications-header">
+          <button onClick={() => setSelectedNotification(null)} className="btn-back">← Back</button>
+          <h2>📋 Registrations for: {selectedNotification.title}</h2>
+        </div>
+        {registrationsLoading ? (
+          <div className="registrations-spinner">Loading registrations...</div>
+        ) : registrations.length === 0 ? (
+          <div className="registrations-empty">
+            <p>No registrations yet for this notification.</p>
+          </div>
+        ) : (
+          <div className="registrations-list">
+            <table className="registrations-table">
+              <thead>
+                <tr>
+                  <th>Student Name</th>
+                  <th>Email</th>
+                  <th>Event</th>
+                  <th>Department</th>
+                  <th>Registered Date</th>
+                </tr>
+              </thead>
+              <tbody>
+                {registrations.map((reg) => (
+                  <tr key={reg._id}>
+                    <td>{reg.studentName || reg.student?.name || "N/A"}</td>
+                    <td>{reg.studentEmail || reg.student?.email || "N/A"}</td>
+                    <td>{reg.eventTitle || reg.event?.title || "N/A"}</td>
+                    <td>{reg.studentDepartment || reg.student?.department || "N/A"}</td>
+                    <td>{reg.registeredDate ? new Date(reg.registeredDate).toLocaleDateString() : "N/A"}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
+      </div>
+    );
   }
 
   return (
@@ -84,6 +156,8 @@ const Notifications = () => {
             <div
               key={notification._id}
               className={`notification-item ${notification.read ? "read" : "unread"}`}
+              onClick={() => user?.role === "admin" && handleNotificationClick(notification)}
+              style={user?.role === "admin" ? { cursor: "pointer" } : {}}
             >
               <div className="notification-content">
                 <h3>{notification.title}</h3>
@@ -94,7 +168,7 @@ const Notifications = () => {
               <div className="notification-actions">
                 {!notification.read && (
                   <button
-                    onClick={() => markAsRead(notification._id)}
+                    onClick={(e) => { e.stopPropagation(); markAsRead(notification._id); }}
                     className="btn-mark-read"
                   >
                     ✓
@@ -106,7 +180,7 @@ const Notifications = () => {
                   </a>
                 )}
                 <button
-                  onClick={() => deleteNotification(notification._id)}
+                  onClick={(e) => { e.stopPropagation(); deleteNotification(notification._id); }}
                   className="btn-delete"
                 >
                   ✕
